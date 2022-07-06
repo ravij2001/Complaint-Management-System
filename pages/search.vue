@@ -33,7 +33,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <NuxtLink to="/index" class="nav-link">Home</NuxtLink>
+            <NuxtLink to="/" class="nav-link">Home</NuxtLink>
             <NuxtLink to="/user" class="nav-link">Complaint</NuxtLink>
             <NuxtLink to="/search" class="nav-link">View</NuxtLink>
             <NuxtLink to="/admin" class="nav-link">Admin</NuxtLink>
@@ -60,6 +60,7 @@
                     <input
                       class="form-control"
                       type="text"
+                      id="email"
                       placeholder="Email"
                       v-model="data.query"
                     />
@@ -80,23 +81,23 @@
     <div class="box container">
       <table class="table table-bordered table-hover">
         <tr class="">
-          <th>Name</th>
-          <th>Email</th>
-          <th>Mobile</th>
-          <th>Status</th>
-          <th>view messages</th>
+          <th style="padding: 20px;">Name</th>
+          <th style="padding: 20px;">Email</th>
+          <th style="padding: 20px;">Mobile</th>
+          <th style="padding: 20px;">Status</th>
+          <th style="padding: 20px;">view messages</th>
         </tr>
 
         <tr v-for="row in data.allData" :key="row">
-          <td>{{ row.name }}</td>
-          <td>{{ row.email }}</td>
-          <td>{{ row.mobile }}</td>
-          <td>{{ row.ticket_status }}</td>
+          <td style="padding: 20px;">{{ row.name }}</td>
+          <td style="padding: 20px;">{{ row.email }}</td>
+          <td style="padding: 20px;">{{ row.mobile }}</td>
+          <td style="padding: 20px;">{{ row.ticket_status }}</td>
           
-            <td><button type="button" class="btn btn-primary" @click="click(row.ticket_ID,row.user_ID)">Messages</button></td>
+            <td style="padding: 10px;"><button type="button" class="btn btn-primary bg-primary" @click="click(row.ticket_ID,row.user_ID)">Messages</button></td>
         </tr>
         <tr v-if="!data.allData">
-          <td colspan="6" class="text-center">No Data Found</td>
+          <td colspan="6" class="text-center" style="padding: 20px;">No Data Found</td>
         </tr>
       </table>
     </div>
@@ -138,11 +139,19 @@ export default {
   
   methods: {
     async submit(e){
-      const data = await axios.post(
+      let x = document.getElementById('email').value;
+      if(x == '')
+      {
+        alert('Enter valid email ...')
+      }
+      else
+      {
+        const data = await axios.post(
         "http://localhost/CMS/search.php",
         this.data
       );
       this.data.allData = data.data;
+    }
     },
     async click(ticketID,userID) {
       this.$router.push('/chat?ticket_ID='+ ticketID + '&' + 'user_ID=' + userID);

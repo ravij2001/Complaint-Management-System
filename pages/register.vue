@@ -33,7 +33,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <NuxtLink to="/index" class="nav-link">Home</NuxtLink>
+            <NuxtLink to="/" class="nav-link">Home</NuxtLink>
             <NuxtLink to="/user" class="nav-link">User</NuxtLink>
             <NuxtLink to="/admin" class="nav-link">Admin</NuxtLink>
             <NuxtLink to="#contact" class="nav-link">Contact</NuxtLink>
@@ -56,6 +56,7 @@
                     <input
                       class="form-control"
                       type="text"
+                      id="name"
                       placeholder="Name"
                       v-model="data.name"
                       required
@@ -70,7 +71,8 @@
                   <div class="input-group">
                     <input
                       class="form-control"
-                      type=""
+                      type="text"
+                      id="email"
                       placeholder="Email"
                       v-model="data.email"
                       required
@@ -87,6 +89,7 @@
                     <input
                       class="form-control"
                       type="text"
+                      id="mobile"
                       placeholder="Mobile"
                       v-model="data.mobile"
                       required
@@ -166,13 +169,23 @@ export default {
     this.allData =  this.$routes.params.data;
   },
   methods: {
-    submit(e) {
+    async submit(e) {
       // console.log("1");
-      e.preventDefault();
-      // console.log("2");
-      alert("Details submitted successfully");
-      axios.post("http://localhost/CMS/search.php", this.formData);
-      this.$router.push("/search");
+      let a = document.getElementById('name').value;
+      let b = document.getElementById('email').value;
+      let c = document.getElementById('mobile').value;
+      let d = document.getElementById('exampleFormControlTextarea1').value;
+      if(a == '' || b == '' || c == '' || d == '')
+      {
+        alert('Enter all fields ...');
+      }
+      else
+      {
+        e.preventDefault();
+        alert("Details submitted successfully");
+        axios.post("http://localhost/CMS/search.php", this.formData);
+        this.$router.push("/search");
+      }      
     },
   },
 };

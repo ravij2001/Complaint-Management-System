@@ -33,7 +33,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <NuxtLink to="/index" class="nav-link">Home</NuxtLink>
+            <NuxtLink to="/" class="nav-link">Home</NuxtLink>
             <NuxtLink to="/user" class="nav-link">Complaint</NuxtLink>
             <NuxtLink to="/search" class="nav-link">View</NuxtLink>
             <NuxtLink to="/admin" class="nav-link">Admin</NuxtLink>
@@ -55,7 +55,8 @@
                   <div class="input-group">
                     <input
                       class="form-control"
-                      type=""
+                      type="email"
+                      id="email"
                       placeholder="Email"
                       v-model="data.email"
                       required
@@ -74,6 +75,7 @@
                       type="text"
                       placeholder="Name"
                       v-model="data.name"
+                      id="name"
                       required
                     />
                   </div>
@@ -88,6 +90,7 @@
                       class="form-control"
                       type=""
                       placeholder="Mobile"
+                      id="mobile"
                       v-model="data.mobile"
                       required
                     />
@@ -165,13 +168,23 @@ export default {
   },
   methods: {
   async submit(e) {
-    e.preventDefault();
+    let a = document.getElementById('name').value;
+      let b = document.getElementById('email').value;
+      let c = document.getElementById('mobile').value;
+      let d = document.getElementById('exampleFormControlTextarea1').value;
+      if(a == '' || b == '' || c == '' || d == '')
+      {
+        alert('Enter all fields ...');
+      }
+      else{
+        e.preventDefault();
     alert('Complaint registed successfully');
       const data = await axios.post(
         "http://localhost/CMS/api1.php",
         this.data
       );
       this.$router.push("/search");
+    }
     },  
   },
 };

@@ -35,7 +35,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <NuxtLink to="/index" class="nav-link">Home</NuxtLink>
+            <NuxtLink to="/" class="nav-link">Home</NuxtLink>
             <NuxtLink to="/user" class="nav-link">Complaint</NuxtLink>
             <NuxtLink to="/search" class="nav-link">View</NuxtLink>
             <NuxtLink to="/admin" class="nav-link">Admin</NuxtLink>
@@ -58,10 +58,10 @@
                 active and appropriate team members.
               </p>
               <a
-                href="#"
+                href="#contact"
                 class="btn btn-primary px-3 mt-3 button1"
                 style="border-radius: 20px"
-                >Request Demo</a
+                >Contact us</a
               >
             </div>
           </div>
@@ -104,7 +104,7 @@
                 swiftness.
               </p>
               <a
-                href="#"
+                href="#about"
                 class="btn btn-primary px-3 mt-3 button3"
                 style="border-radius: 20px"
                 >About Us</a
@@ -115,8 +115,40 @@
       </div>
     </section>
 
+    <!-- about me  -->
+<section id="about" class="mb-5">
+            <div class="container-lg">
+              <div class="row align-items-center">
+                <div class="col-md-6 mt-md-0">
+                  <div class="home-img">
+                    <img
+                      class="rounded-circle mw-100"
+                      src="circle.png"
+                      alt="Profile Image"
+                      height="500"
+                      width="500"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 mt-5  mt-md-0">
+                  <div class="home-text">
+                    <p class="text-muted mb-1">Hello I'm</p>
+                    <h1 class="text-primary text-uppercase fs-1 fw-bold">
+                      Web Developer
+                    </h1>
+                    <h2 class="fs-4">Ravij Parikh</h2>
+                    <p class="mt-4 text-muted">
+                      I am a full stack developer working on various technologies like python , vue js , php.
+                    </p>
+                    <a href="Resume.pdf" class="btn btn-primary px-3 mt-3 button1" style="border-radius:20px;">Resume</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
     <!-- contact form  -->
-    <div class="container">
+    <div class="container" id="contact">
       <section class="contact py-5" id="contact">
         <div class="container-lg py-4">
           <div class="row justify-content-center mb-4">
@@ -164,6 +196,8 @@
                       <input
                         type="text"
                         placeholder="Your name"
+                        v-model="data.name"
+                        id="name"
                         class="
                           form-control form-control-lg
                           fs-6
@@ -176,6 +210,8 @@
                       <input
                         type="text"
                         placeholder="Your Email"
+                        id="email"
+                        v-model="data.email"
                         class="
                           form-control form-control-lg
                           fs-6
@@ -190,6 +226,8 @@
                       <input
                         type="text"
                         placeholder="Your Subject"
+                        id="subject"
+                        v-model="data.subject"
                         class="
                           form-control form-control-lg
                           fs-6
@@ -204,6 +242,8 @@
                       <textarea
                         rows="5"
                         placeholder="Your Message"
+                        v-model="data.message"
+                        id="message"
                         class="
                           form-control form-control-lg
                           fs-6
@@ -219,7 +259,7 @@
                       <button
                         type="submit"
                         class="btn btn-primary px-3 mt-5 button2"
-                        style="border-radius: 20px"
+                        style="border-radius: 20px" @click="submit"
                       >
                         Send Message
                       </button>
@@ -249,6 +289,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   link: [
     {
@@ -265,6 +306,40 @@ export default {
       href: "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js",
     },
   ],
+  data() {
+    return {
+      data: {
+        name:'',
+        email:'',
+        subject:'',
+        message:'',
+    },
+    };
+  },
+   methods: {
+    async submit(e){
+      let a = document.getElementById('name').value;
+      let b = document.getElementById('email').value;
+      let c = document.getElementById('subject').value;
+      let d = document.getElementById('message').value;
+      if(a == '' || b == '' || c == '' || d == '')
+      {
+        alert('Enter all fields ...')
+        e.preventDefault()
+      }
+      else
+      {
+          e.preventDefault();
+        alert("Message sent successfully ...");
+        const data = await axios.post(
+        "http://localhost/CMS/contact.php",
+        this.data
+      );
+      const clear = document.getElementById("contact");
+      
+    }
+    },
+   }
 };
 </script>
 <style scoped>

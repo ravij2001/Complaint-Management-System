@@ -33,47 +33,35 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <NuxtLink to="/index" class="nav-link">Home</NuxtLink>
+            <NuxtLink to="/" class="nav-link">Home</NuxtLink>
             <NuxtLink to="/user" class="nav-link">Complaint</NuxtLink>
             <NuxtLink to="/search" class="nav-link">View</NuxtLink>
             <NuxtLink to="/admin" class="nav-link">Admin</NuxtLink>
           </div>
         </div>
-        
       </div>
     </nav>
 
     <br><br><br><br>
  <h4 class="text-center">Chat with User</h4>
 <br><br>
-<h5 class="text-center">Ticket ID of user : {{data.token}} admin ID : {{data.adminID}} user ID : {{data.userID}} </h5>
-<button type="button" @click="click()" class="btn btn-primary mt-4" style= "width:13%;margin-left:660px;">Reply to complaints</button>
+<h5 class="text-center">Ticket ID of User : {{data.token}} Admin ID : {{data.adminID}} User ID : {{data.userID}} </h5>
 <div class="d-flex mt-5">
-    <table class="table table-bordered table-hover" style="width:40%;margin-left: 60px;">
+    <table class="table table-bordered table-hover" style="width:40%;margin-left: 460px;">
         <tr>
-          <th class="text-center" style="padding: 15px;">User complaints</th>
-        </tr>
-        <tr v-for="row in data.alldata" :key="row">
-         <td class="text-center" style="padding: 15px;">{{}} <small>{{}}</small></td>
-         </tr>
-        <tr v-if="!data.alldata">
-          <td colspan="6" class="text-center">No Data Found</td>
-        </tr>
-      </table>
-    <table class="table table-bordered table-hover" style="width:40%;margin-left: 60px;">
-        <tr>
-          <th class="text-center" style="padding: 15px;">Reply complaints</th>
+          <th class="text-center bg-primary" style="padding: 15px;">Chats</th>
         </tr>
        <tr v-for="row in data.alldata" :key="row">
-         <td class="text-center" style="padding: 15px;">{{row.message_from == 0 ? 'User' : 'Admin'}} : {{row.messages}} <small>{{row.Date}}</small></td>
-         </tr>
+    <td :style="[ row.message_from == '0' ? { 'text-align': 'left','padding': '20px'}: { 'text-align':'right','padding': '20px'}]"> {{row.message_from == 0 ? 'User' : 'Admin'}} : {{row.messages}} <small>{{row.Date}}</small></td>
+    </tr>
         <tr v-if="!data.alldata">
-          <td colspan="6" class="text-center">No Data Found</td>
+          <td colspan="6" class="text-center" style="padding:20px;">No Data Found</td>
         </tr>
       </table>
-  
   </div>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  <br><br>
+  <p v-if="data.status" style="font-size:40px;" class="text-center">Ticket is closed</p>
+  <br>
 <!-- chat section  -->
 <section class="bg-primary">
   <div class="container my-5 py-5 text-dark">
@@ -85,17 +73,20 @@
               <div class="w-100">
                 <h5 class="text-center">Reply to complaint</h5>
                 <form>
-
                   <div class="form-outline mt-3">
                     <textarea class="form-control" id="textAreaExample" v-model="data.message" rows="4" placeholder="Type yor messages here ..."></textarea>
                   <label class="form-label mt-2" for="textAreaExample">Have a chat with user?</label>
                 </div>
                 <div class="d-flex justify-content-between">
-                  <button type="button" class="btn btn-primary px-4" style="margin-left:250px;" @click="reply()">
+                  <button v-if="!data.status" type="button" class="btn btn-primary px-4" style="margin-left:150px;" @click="reply()">
                     Send
                     <i class="fas fa-long-arrow-alt-right ms-1"></i>
                   </button>
-                </div>
+                  <button v-if="!data.status" type="button" class="btn btn-primary px-4" style="margin-right:150px;" @click="close()">
+                    Close
+                    <i class="fas fa-long-arrow-alt-right ms-1"></i>
+                  </button>  
+               </div>
                   </form>
               </div>
             </div>
@@ -141,17 +132,20 @@ export default {
         userID: this.$route.query.user_ID,
         send: "",
         message: "",
+        status: "",
       },
     };
   },
-  methods: {
-  async click(){
-      const data = await axios.post(
+  async mounted() {
+console.log("inside mounted");
+ const data = await axios.post(
         "http://localhost/CMS/chat1.php",
         this.data
       );
+      console.log("data", data);
       this.data.alldata = data.data;
-    },
+  },
+  methods: {
     async reply(){
      alert("Replied successfully...")
       const data = await axios.post(
@@ -161,6 +155,18 @@ export default {
       this.data.send = data.data;
       const clear = document.getElementById("textAreaExample");
       clear.value='';
+     },
+     async close(){
+        alert('Ticket closed successfully...')
+        const data = await axios.post(
+        "http://localhost/CMS/close.php",
+        this.data
+      );
+        const data1 = await axios.post(
+        "http://localhost/CMS/close1.php",
+        this.data
+      );  
+      this.data.status = data.data;
      }
   }
 }

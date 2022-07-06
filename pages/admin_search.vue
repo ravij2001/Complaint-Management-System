@@ -57,6 +57,7 @@
                   <select
                     class="form-select form-select-sm"
                     aria-label=".form-select-sm example"
+                    id="select"
                     v-model="data.query"
                   >
                     <option value="open">open</option>
@@ -79,21 +80,21 @@
     <div class="box container">
       <table class="table table-bordered table-striped">
         <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Mobile</th>
-          <th>Status</th>
-          <th>View Complaints</th>
+          <th style="padding: 20px;">Name</th>
+          <th style="padding: 20px;">Email</th>
+          <th style="padding: 20px;">Mobile</th>
+          <th style="padding: 20px;">Status</th>
+          <th style="padding: 20px;">View Complaints</th>
         </tr>
         <tr v-for="row in data.allData" :key="row">
-          <td>{{ row.name }}</td>
-          <td>{{ row.email }}</td>
-          <td>{{ row.mobile }}</td>
-          <td>{{ row.ticket_status }}</td>
-         <td><button type="button" class="btn btn-primary" @click="click(row.ticket_ID,row.user_ID)">Reply</button></td>
+          <td style="padding: 20px;">{{ row.name }}</td>
+          <td style="padding: 20px;">{{ row.email }}</td>
+          <td style="padding: 20px;">{{ row.mobile }}</td>
+          <td style="padding: 20px;">{{ row.ticket_status }}</td>
+         <td style="padding: 20px;"><button type="button" class="btn btn-primary bg-primary" style="padding-left:20px;padding-right:20px;" @click="click(row.ticket_ID,row.user_ID)">Reply</button></td>
         </tr>
         <tr v-if="!data.allData">
-          <td colspan="6" class="text-center">No Data Found</td>
+          <td colspan="6" class="text-center" style="padding:20px;">No Data Found</td>
         </tr>
       </table>
     </div>
@@ -134,11 +135,19 @@ export default {
   },
   methods: {
     async submit(e) {
-      const data = await axios.post(
-        "http://localhost/CMS/admin_search_api.php",
+      let x = document.getElementById('select').value;
+      if(x == '')
+      {
+        alert('Select type of ticket to filter ...')
+      }
+      else{
+
+        const data = await axios.post(
+          "http://localhost/CMS/admin_search_api.php",
         this.data
       );
       this.data.allData = data.data;
+    }
     },
     async click(ticketID,userID){
       this.$router.push('/reply?ticket_ID='+ ticketID + '&' + 'user_ID=' + userID + '&admin_ID=1');

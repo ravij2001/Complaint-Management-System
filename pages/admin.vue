@@ -33,7 +33,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <NuxtLink to="/index" class="nav-link">Home</NuxtLink>
+            <NuxtLink to="/" class="nav-link">Home</NuxtLink>
             <NuxtLink to="/user" class="nav-link">Complaint</NuxtLink>
             <NuxtLink to="/search" class="nav-link">View</NuxtLink>
             <NuxtLink to="/admin" class="nav-link">Admin</NuxtLink>
@@ -42,8 +42,8 @@
       </div>
     </nav>
 
-    <br /><br /><br /><br />
-    <h1 class="text-center text-primary">Admin Login Page</h1>
+    <br /><br><br><br>
+    <h1 class="text-center text-primary">Admin Login Page</h1><br>
     <div class="container mt-4 mb-5 d-flex justify-content-center">
       <div class="card px-1 py-3 text-center">
         <div class="card-body">
@@ -58,7 +58,9 @@
                       class="form-control"
                       type="text"
                       placeholder="Name"
+                      id="name"
                       v-model="formData.name"
+                      required
                     />
                   </div>
                 </div>
@@ -71,8 +73,10 @@
                     <input
                       class="form-control"
                       type="password"
+                      id="password"
                       placeholder="Password"
                       v-model="formData.password"
+                      required
                     />
                   </div>
                 </div>
@@ -87,7 +91,7 @@
             </div>
             <button
               class="btn btn-primary btn-block confirm-button"
-              type="submit"
+              type="submit" style="width: 140px;"
             >
               Login
             </button>
@@ -132,15 +136,20 @@ export default {
   },
   methods: {
     submit(e) {
-      e.preventDefault();
+      let x = document.getElementById('name').value;
+      let p =  document.getElementById('password').value;
+      if( x == 'kirtan' &&  p == '12345')
+      {
+        e.preventDefault();
       alert("login successful");
       const data =axios.post("http://localhost/CMS/admin_login_api.php", this.formData);
       if(data)
       {
         this.$router.push("/admin_search");
       }
-      else{
-        alert('wrong username or password');
+    }
+    else{
+        alert('Enter valid username or password');
       }
     },
   },
