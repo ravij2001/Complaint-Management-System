@@ -125,8 +125,8 @@
                       class="rounded-circle mw-100"
                       src="circle.png"
                       alt="Profile Image"
-                      height="500"
-                      width="500"
+                      height="425"
+                      width="425"
                     />
                   </div>
                 </div>

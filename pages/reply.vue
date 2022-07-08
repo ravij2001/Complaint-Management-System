@@ -78,11 +78,11 @@
                   <label class="form-label mt-2" for="textAreaExample">Have a chat with user?</label>
                 </div>
                 <div class="d-flex justify-content-between">
-                  <button v-if="!data.status" type="button" class="btn btn-primary px-4" style="margin-left:150px;" @click="reply()">
+                  <button v-if="data.status == 'OPEN'" type="button" class="btn btn-primary px-4" style="margin-left:150px;" @click="reply()">
                     Send
                     <i class="fas fa-long-arrow-alt-right ms-1"></i>
                   </button>
-                  <button v-if="!data.status" type="button" class="btn btn-primary px-4" style="margin-right:150px;" @click="close()">
+                  <button v-if="data.status == 'OPEN'" type="button" class="btn btn-primary px-4" style="margin-right:150px;" @click="close()">
                     Close
                     <i class="fas fa-long-arrow-alt-right ms-1"></i>
                   </button>  
@@ -144,6 +144,12 @@ console.log("inside mounted");
       );
       console.log("data", data);
       this.data.alldata = data.data;
+
+      const data1 = await axios.post(
+        "http://localhost/CMS/close1.php",
+        this.data);
+      console.log("status : ", data1);  
+       this.data.status = data1.data[0].ticket_status; 
   },
   methods: {
     async reply(){
@@ -162,11 +168,7 @@ console.log("inside mounted");
         "http://localhost/CMS/close.php",
         this.data
       );
-        const data1 = await axios.post(
-        "http://localhost/CMS/close1.php",
-        this.data
-      );  
-      this.data.status = data.data;
+        
      }
   }
 }

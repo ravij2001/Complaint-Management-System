@@ -46,7 +46,7 @@
  <h4 class="text-center">Chat with Admin</h4>
 <br><br>
 <h5 class="text-center">Ticket ID of user : {{data.token}} and User ID : {{data.userID}}</h5>
-<button type="button" @click="click()" class="btn btn-primary mt-4" style= "width:10%;margin-left:685px; padding: 10px;">Show messages</button>
+<!-- <button type="button" @click="click()" class="btn btn-primary mt-4" style= "width:10%;margin-left:685px; padding: 10px;">Show messages</button> -->
 <div class="d-flex mt-5">
     <table class="table table-bordered table-hover" style="width:40%;margin-left:460px;">
         <tr>
@@ -63,7 +63,7 @@
     
    </div>
    <br><br>
-   <p v-if="data.status" style="font-size:40px;" class="text-center">Ticket is closed</p>
+   <p v-if="data.status == 'CLOSED'" style="font-size:40px;" class="text-center">Ticket is closed</p>
 <br>
 <!-- chat section  -->
 <section class="bg-primary">
@@ -82,7 +82,7 @@
                   <label class="form-label mt-2" for="textAreaExample">Have a chat with admin?</label>
                 </div>
                 <div class="d-flex justify-content-between">
-                  <button type="button" class="btn btn-primary px-4" style="margin-left:250px;" @click="send()">
+                  <button v-if="data.status == 'OPEN'" type="button" class="btn btn-primary px-4" style="margin-left:250px;" @click="send()">
                     Send
                     <i class="fas fa-long-arrow-alt-right ms-1"></i>
                   </button>
@@ -131,17 +131,24 @@ export default {
         userID: this.$route.query.user_ID,
         send: "",
         message: "",
+        status: "",
       },
     };
   },
-  methods: {
-  async click(){
+   async mounted() {
       const data = await axios.post(
         "http://localhost/CMS/chat.php",
         this.data
       );
       this.data.alldata = data.data;
-    },
+      const data1 = await axios.post(
+        "http://localhost/CMS/close1.php",
+        this.data);
+      // console.log("status : ", data1);  
+        this.data.status = data1.data[0].ticket_status;
+        console.log("hello" + this.data.status);
+    },  
+  methods: {
     async send(){
      alert("Comment added successfully...")
       const data = await axios.post(
